@@ -2,6 +2,9 @@ import OpenAI from 'openai';
 import { OPENAI_KEY } from '$env/static/private';
 import { json } from '@sveltejs/kit';
 
+export async function onRequest({ request, env }) {
+	return new Response('Variable: ' + env.OPENAI_KEY);
+}
 const openai = new OpenAI({
 	organization: 'org-64OmNEiPWRs4fn9QzgtqwnZq',
 	apiKey: OPENAI_KEY
