@@ -1,21 +1,14 @@
-import cloudfare from '@sveltejs/adapter-cloudflare';
+svelte.config.js;
+import adapter from '@sveltejs/adapter-cloudflare';
 
-/** @type {import('@sveltejs/kit').Config} */
-const config = {
+export default {
 	kit: {
-		adapter: cloudfare()
+		adapter: adapter({
+			// See below for an explanation of these options
+			routes: {
+				include: ['/*'],
+				exclude: ['<all>']
+			}
+		})
 	}
 };
-
-/* export default config;
-
-import adapter from '@sveltejs/adapter-auto';
-
-/** @type {import('@sveltejs/kit').Config} */
-/* const config = {
-	kit: {
-		adapter: adapter()
-	}
-};
-
-export default config; */
