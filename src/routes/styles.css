@@ -1,0 +1,15 @@
+
+body, html {
+    margin: 0;
+    font-family: 'Outfit', sans-serif;
+}
+* {
+    box-sizing: border-box;
+}
+li {
+    background: green;
+    list-style: none;
+    margin-bottom: 12px;
+    padding: 12px;
+    border-radius: 6px;
+}
