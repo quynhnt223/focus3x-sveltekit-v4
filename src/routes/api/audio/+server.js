@@ -4,7 +4,7 @@ import { json } from '@sveltejs/kit';
 
 const openai = new OpenAI({
 	organization: 'org-64OmNEiPWRs4fn9QzgtqwnZq',
-	apiKey: process.env.OPENAI_KEY
+	apiKey: context.env.OPENAI_KEY
 });
 
 export async function POST(requestEvent) {
