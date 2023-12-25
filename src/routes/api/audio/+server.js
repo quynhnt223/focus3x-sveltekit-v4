@@ -2,14 +2,6 @@ import OpenAI from 'openai';
 import { OPENAI_KEY } from '$env/static/private';
 import { json } from '@sveltejs/kit';
 
-// Access environment variable
-const OPENAI_KEY = import.meta.env.OPENAI_KEY;
-
-export async function onRequest({ env }) {
-	// Return the value of the OPENAI_KEY environment variable
-	return new Response('Variable: ' + OPENAI_KEY);
-}
-
 const openai = new OpenAI({
 	organization: 'org-64OmNEiPWRs4fn9QzgtqwnZq',
 	apiKey: OPENAI_KEY
