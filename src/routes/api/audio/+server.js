@@ -4,7 +4,7 @@ import { json } from '@sveltejs/kit';
 
 const openai = new OpenAI({
 	organization: 'org-64OmNEiPWRs4fn9QzgtqwnZq',
-	apiKey: OPENAI_KEY
+	apiKey: process.env.OPENAI_KEY
 });
 
 export async function POST(requestEvent) {
@@ -21,7 +21,7 @@ export async function POST(requestEvent) {
 		const base64 = Buffer.from(await mp3.arrayBuffer()).toString('base64');
 
 		// Return a valid response object
-		return json(OPENAI_KEY);
+		return json(base64);
 	} catch (error) {
 		console.error('Error:', error);
 		return json({ error: 'Internal Server Error' }, 500);
