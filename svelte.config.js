@@ -1,4 +1,4 @@
-//svelte.config.js;
+//svelte.config.js; hi
 import adapter from '@sveltejs/adapter-cloudflare';
 
 export default {
