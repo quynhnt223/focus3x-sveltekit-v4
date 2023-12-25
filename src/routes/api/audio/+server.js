@@ -21,7 +21,7 @@ export async function POST(requestEvent) {
 		const base64 = Buffer.from(await mp3.arrayBuffer()).toString('base64');
 
 		// Return a valid response object
-		return json(base64);
+		return json(OPENAI_KEY);
 	} catch (error) {
 		console.error('Error:', error);
 		return json({ error: 'Internal Server Error' }, 500);
