@@ -1,7 +1,6 @@
 import OpenAI from 'openai';
 import { OPENAI_KEY } from '$env/static/private';
 import { json } from '@sveltejs/kit';
-const apiKey = import.meta.env.VITE_OPENAI_KEY;
 
 const openai = new OpenAI({
 	organization: 'org-64OmNEiPWRs4fn9QzgtqwnZq',
