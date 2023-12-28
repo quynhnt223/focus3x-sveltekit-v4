@@ -1,5 +1,5 @@
 <script>
-	import { goto } from '$app/navigation';
+	import { userStripe } from '/src/store/userStripe.js';
 	let checkouturl = null;
 
 	async function checkout() {

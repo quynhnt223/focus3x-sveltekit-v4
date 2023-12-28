@@ -1,65 +1,80 @@
 <!-- Login.svelte -->
 <script>
 	import { auth } from '/src/firebase/firebase.js';
-	import { signInWithEmailAndPassword } from 'firebase/auth';
+	import { createUserWithEmailAndPassword } from 'firebase/auth';
 	import { goto } from '$app/navigation';
 	import Logo from '../../components/icons/Logo.svelte';
+	import { userId } from '/src/store/userId.js';
+	import PageLoading from '/src/components/pageLoad/PageLoading.svelte';
 
 	let email = '';
 	let password = '';
+	let confirmPassword = '';
 	let errorMessage = '';
 
-	const login = async () => {
+	const signUp = async () => {
+		if (password !== confirmPassword) {
+			errorMessage = 'Passwords do not match.';
+			return;
+		}
+
 		try {
-			const userCredential = await signInWithEmailAndPassword(auth, email, password);
-			const user = userCredential.user;
-			console.log('Login successful');
+			const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+			console.log('User signed up:', userCredential.user.uid);
 		} catch (error) {
-			console.error('Login error:', error.message);
+			console.error('Signup failed:', error.message);
 			errorMessage = error.message;
 		}
 	};
+
+	$: if ($userId !== null) {
+		goto('/dashboard/md/today');
+	}
 </script>
 
-<div class="lg-wrap">
-	<div class="lg-left">
-		<div class="lg-head"><a href="/"><Logo></Logo></a></div>
-		<div class="lg-form-wrap">
-			<h3>Sign up to Focus3x</h3>
-			{#if errorMessage}
-				<p class="error-message">{errorMessage}</p>
-			{/if}
-			<form on:submit|preventDefault={login}>
-				<label>
-					<div>Email</div>
-					<input type="email" bind:value={email} />
-				</label>
+{#if $userId === null}
+	<div class="lg-wrap">
+		<div class="lg-left">
+			<div class="lg-head"><a href="/"><Logo></Logo></a></div>
+			<div class="lg-form-wrap">
+				<h3>Sign up to Focus3x</h3>
+				{#if errorMessage}
+					<p class="error-message">{errorMessage}</p>
+				{/if}
+				<form on:submit|preventDefault={signUp}>
+					<label>
+						<div>Email</div>
+						<input type="email" bind:value={email} />
+					</label>
 
-				<label>
-					<div>Password</div>
-					<input type="password" bind:value={password} />
-				</label>
-				<label>
-					<div>Confirm Password</div>
-					<input type="password" />
-				</label>
+					<label>
+						<div>Password</div>
+						<input type="password" bind:value={password} />
+					</label>
+					<label>
+						<div>Confirm Password</div>
+						<input type="password" bind:value={confirmPassword} />
+					</label>
 
-				<button type="submit">Create Account</button>
+					<button type="submit">Create Account</button>
 
-				<div class="forgot-password-link">
-					By signing up, I agree with Terms of Service and Privacy Policy
-				</div>
+					<div class="forgot-password-link">
+						By signing up, I agree with Terms of Service and Privacy Policy
+					</div>
 
-				<div class="signup-link">
-					Already have an account? <a class="lg-signup" href="/login">Log in</a>
-				</div>
-			</form>
+					<div class="signup-link">
+						Already have an account? <a class="lg-signup" href="/login">Log in</a>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="lg-right">
+			<img src="/hr4.svg" alt="hr" />
 		</div>
 	</div>
-	<div class="lg-right">
-		<img src="/hr4.svg" alt="hr" />
-	</div>
-</div>
+{:else}
+	<PageLoading></PageLoading>
+{/if}
 
 <style>
 	.lg-head a {

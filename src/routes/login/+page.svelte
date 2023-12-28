@@ -4,6 +4,8 @@
 	import { signInWithEmailAndPassword } from 'firebase/auth';
 	import { goto } from '$app/navigation';
 	import Logo from '../../components/icons/Logo.svelte';
+	import { userId } from '/src/store/userId.js';
+	import PageLoading from '/src/components/pageLoad/PageLoading.svelte';
 
 	let email = '';
 	let password = '';
@@ -13,49 +15,57 @@
 		try {
 			const userCredential = await signInWithEmailAndPassword(auth, email, password);
 			const user = userCredential.user;
-			console.log('Login successful');
+			console.log('Login successful ' + user.uid);
 		} catch (error) {
 			console.error('Login error:', error.message);
 			errorMessage = error.message;
 		}
 	};
+	$: if ($userId !== null) {
+		goto('/dashboard/md/today');
+	}
 </script>
 
-<div class="lg-wrap">
-	<div class="lg-left">
-		<div class="lg-head"><a href="/"><Logo></Logo></a></div>
-		<div class="lg-form-wrap">
-			<h3>Login to your Account</h3>
-			{#if errorMessage}
-				<p class="error-message">{errorMessage}</p>
-			{/if}
-			<form on:submit|preventDefault={login}>
-				<label>
-					<div>Email</div>
-					<input type="email" bind:value={email} />
-				</label>
+{#if $userId === null}
+	<div class="lg-wrap">
+		<div class="lg-left">
+			<div class="lg-head"><a href="/"><Logo></Logo></a></div>
+			<div class="lg-form-wrap">
+				<h3>Login to your Account</h3>
+				{$userId}
+				{#if errorMessage}
+					<p class="error-message">{errorMessage}</p>
+				{/if}
+				<form on:submit|preventDefault={login}>
+					<label>
+						<div>Email</div>
+						<input type="email" bind:value={email} />
+					</label>
 
-				<label>
-					<div>Password</div>
-					<input type="password" bind:value={password} />
-				</label>
+					<label>
+						<div>Password</div>
+						<input type="password" bind:value={password} />
+					</label>
 
-				<button type="submit">Login</button>
+					<button type="submit">Login</button>
 
-				<div class="forgot-password-link">
-					<a class="lg-forgot" href="/forgot">Forgot Password?</a>
-				</div>
+					<div class="forgot-password-link">
+						<a class="lg-forgot" href="/forgot">Forgot Password?</a>
+					</div>
 
-				<div class="signup-link">
-					Don't have an account? <a class="lg-signup" href="/signup">Sign Up</a>
-				</div>
-			</form>
+					<div class="signup-link">
+						Don't have an account? <a class="lg-signup" href="/signup">Sign Up</a>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="lg-right">
+			<img src="/hr.jpg" alt="hr" />
 		</div>
 	</div>
-	<div class="lg-right">
-		<img src="/hr.jpg" alt="hr" />
-	</div>
-</div>
+{:else}
+	<PageLoading></PageLoading>
+{/if}
 
 <style>
 	.lg-head a {

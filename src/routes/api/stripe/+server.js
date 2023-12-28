@@ -2,6 +2,7 @@
 import Stripe from 'stripe';
 import { STRIPE_KEY, BASE } from '$env/static/private';
 import { json } from '@sveltejs/kit';
+import { userStripe } from '../../../store/userStripe';
 
 const stripe = new Stripe(STRIPE_KEY, {
 	apiVersion: '2023-10-16'
@@ -17,13 +18,14 @@ export async function POST() {
 				}
 			],
 			mode: 'payment',
-			success_url: `${BASE}/success`,
+			success_url: `${BASE}/success/`,
 			cancel_url: `${BASE}/cancel`
 		});
 
 		// Get the URL from the session response
 		const url2 = session.url;
 		console.log(url2);
+
 		return json(url2);
 	} catch (error) {
 		// Fix the variable name to 'error' instead of 'errorObj'
